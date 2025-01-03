@@ -3,6 +3,9 @@ from pygame import joystick, event, init, Clock
 class ProController:
     def __init__(self, id, needs_pump = False, update_interval = 0):
         init()
+        if joystick.get_init() == False:
+            raise Exception("Joystick module failed to initialize")
+        
         self._js = joystick.Joystick(id)
         self.name = self._js.get_name()
 
@@ -106,6 +109,7 @@ class ProController:
 if __name__ == "__main__":
     # test
     pro = ProController(0, True)
+
     print(pro.name)
 
     while True:
