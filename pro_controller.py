@@ -1,15 +1,29 @@
 from pygame import joystick, event, init, Clock
 
+__all__ = ["ProController"]
+
 class ProController:
-    def __init__(self, id, needs_pump = False, update_interval = 0):
-        init()
+    def __init__(self, id: int = 0, using_pygame = False, update_interval = 0):
+        """
+        Initializes a ProController instance.
+        This class represents a game controller and provides methods to interact with it. It can be used within a pygame script or as a standalone module.
+
+        Args:
+            id (int, optional): the index of the controller. If there is only one, 0 is probably it. Defaults to 0.
+            using_pygame (bool, optional): Set to true if this module is within a pygame script. You will then be responsible for handling events every frame and intialising modules. Defaults to False.
+            update_interval (int, optional): How often to update the controller. Defaults to 0 meaning no wait. If set to zero the controller will update at every call of `ProController.update()`. If set to a value greater than zero, the update method will pause the program using pygames `Clock`. If using in a pygame script, set this to zero so you can manage framerate with your own `Clock`
+
+        """
+        if not using_pygame:
+            init()
+
         if joystick.get_init() == False:
             raise Exception("Joystick module failed to initialize")
         
         self._js = joystick.Joystick(id)
         self.name = self._js.get_name()
 
-        self.needs_pump = needs_pump
+        self._needs_pump = not using_pygame
 
         
         self.update_frequency = 1/update_interval if update_interval > 0 else 0 # frequency of zero means as fast as possible
@@ -22,7 +36,7 @@ class ProController:
 
     def update(self):
         self._clock.tick(self.update_frequency)
-        if self.needs_pump:
+        if self._needs_pump:
             for _ in event.get():
                 pass
 
@@ -108,7 +122,7 @@ class ProController:
 
 if __name__ == "__main__":
     # test
-    pro = ProController(0, True)
+    pro = ProController()
 
     print(pro.name)
 
