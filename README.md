@@ -5,6 +5,7 @@ The `pro_controller.py` script is designed to interface with and control a Ninte
 
 
 I primarily designed this to control my raspberry pi, so the default initialisation is geared towards that usecase, but it can be used in other contexts as well. 
+However...it currently does not work properly on a pi as aparantly the mapping of button numbers is different on different devices....
 
 ## Features
 
